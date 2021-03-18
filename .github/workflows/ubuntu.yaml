@@ -1,0 +1,38 @@
+name: "Tests"
+on:
+  push:
+    branches:
+      - "master"
+  pull_request:
+    branches:
+      - "master"
+jobs:
+  test:
+    name: "Running tests"
+    runs-on: "ubuntu-20.04"
+    env:
+      erlang_version: "23.2.1-1"
+      rebar3_version: "3.14.3"
+    steps:
+      - uses: "actions/checkout@v2"
+      - name: "Installing Erlang"
+        run: |
+          cd /tmp
+          pkg_name="esl-erlang_${erlang_version}~ubuntu~focal_amd64.deb"
+          pkg_uri="https://packages.erlang-solutions.com/erlang/debian/pool/${pkg_name}"
+          wget -nv $pkg_uri
+          sudo dpkg -i ./${pkg_name}
+          sudo apt-get update
+          sudo apt-get -f install
+      - name: "Installing Rebar3"
+        run: |
+          cd /tmp
+          bin_uri="https://github.com/erlang/rebar3/releases/download/${rebar3_version}/rebar3"
+          wget -nv $bin_uri
+          sudo install -m 0755 rebar3 /usr/local/bin/rebar3
+      - name: "Running dialyzer"
+        run: |
+          make dialyzer
+      - name: "Running eunit"
+        run: |
+          make test
