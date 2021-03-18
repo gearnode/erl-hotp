@@ -31,7 +31,6 @@ truncate(HMACResult, Size) ->
   S3 = (binary:at(HMACResult, Offset + 3) band 16#ff),
   (S0 bor S1 bor S2 bor S3) rem pow10(Size).
 
-
 -spec pow10(non_neg_integer()) ->
         pos_integer().
 pow10(N) when N > 0 ->
