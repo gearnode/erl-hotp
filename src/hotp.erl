@@ -25,11 +25,11 @@ generate(Key, Counter, Digit) ->
         non_neg_integer().
 truncate(HMACResult, Size) ->
   Offset = binary:at(HMACResult, 19) band 16#0f,
-  Code0 = (binary:at(HMACResult, Offset) band 16#7f) bsl 24,
-  Code1 = (binary:at(HMACResult, Offset + 1) band 16#ff) bsl 16,
-  Code2 = (binary:at(HMACResult, Offset + 2) band 16#ff) bsl 8,
-  Code3 = (binary:at(HMACResult, Offset + 3) band 16#ff),
-  P = Code0 bor Code1 bor Code2 bor Code3,
+  S0 = (binary:at(HMACResult, Offset) band 16#7f) bsl 24,
+  S1 = (binary:at(HMACResult, Offset + 1) band 16#ff) bsl 16,
+  S2 = (binary:at(HMACResult, Offset + 2) band 16#ff) bsl 8,
+  S3 = (binary:at(HMACResult, Offset + 3) band 16#ff),
+  P = S0 bor S1 bor S2 bor S3,
   P rem pow10(Size).
 
 -spec pow10(non_neg_integer()) ->
