@@ -18,24 +18,26 @@
          new_validator/1, new_validator/2,
          validate/2]).
 
--export_type([key/0, counter/0,
+-export_type([key/0, counter/0, password/0, password_size/0,
               validator_state/0]).
 
 -type key() :: binary().
 -type counter() :: non_neg_integer().
+-type password_size() :: pos_integer().
+-type password() :: non_neg_integer().
 
 -opaque validator_state() :: #{key := key(),
                                counter := counter(),
                                size := pos_integer(),
                                look_ahead := non_neg_integer()}.
 
--spec generate(key(), counter(), pos_integer()) ->
-        non_neg_integer().
+-spec generate(key(), counter(), password_size()) ->
+        password().
 generate(Key, Counter, Size) ->
   truncate(crypto:mac(hmac, sha, Key, <<Counter:64>>), Size).
 
--spec truncate(binary(), pos_integer()) ->
-        non_neg_integer().
+-spec truncate(binary(), password_size()) ->
+        password().
 truncate(HMACResult, Size) ->
   Offset = binary:at(HMACResult, 19) band 16#0f,
   S0 = (binary:at(HMACResult, Offset) band 16#7f) bsl 24,
@@ -64,7 +66,7 @@ new_validator(Key) ->
 -spec new_validator(key(), Options) ->
         validator_state()
           when Options :: #{counter => counter(),
-                            size => pos_integer(),
+                            size => password_size(),
                             look_ahead => non_neg_integer()}.
 new_validator(Key, Options) ->
   #{key => Key,
@@ -72,7 +74,7 @@ new_validator(Key, Options) ->
     size => maps:get(size, Options, 6),
     look_ahead => maps:get(look_ahead, Options, 5)}.
 
--spec validate(validator_state(), Password :: pos_integer()) ->
+-spec validate(validator_state(), password()) ->
         {valid | invalid, validator_state()}.
 validate(#{key := Key, size := Size, counter := Counter0,
            look_ahead := LookAhead} = State, Password) ->
