@@ -14,12 +14,25 @@
 
 -module(hotp).
 
--export([generate/3]).
+-export([generate/3,
+         new_validator/1, new_validator/2,
+         validate/2]).
 
--spec generate(binary(), non_neg_integer(), pos_integer()) ->
+-export_type([key/0, counter/0,
+              validator_state/0]).
+
+-type key() :: binary().
+-type counter() :: non_neg_integer().
+
+-opaque validator_state() :: #{key := key(),
+                               counter := counter(),
+                               size := pos_integer(),
+                               look_ahead := non_neg_integer()}.
+
+-spec generate(key(), counter(), pos_integer()) ->
         non_neg_integer().
-generate(Key, Counter, Digit) ->
-  truncate(crypto:mac(hmac, sha, Key, <<Counter:64>>), Digit).
+generate(Key, Counter, Size) ->
+  truncate(crypto:mac(hmac, sha, Key, <<Counter:64>>), Size).
 
 -spec truncate(binary(), pos_integer()) ->
         non_neg_integer().
@@ -42,3 +55,34 @@ pow10(0, Acc) ->
   Acc;
 pow10(N, Acc) ->
   pow10(N - 1, Acc * 10).
+
+-spec new_validator(key()) ->
+        validator_state().
+new_validator(Key) ->
+  new_validator(Key, #{}).
+
+-spec new_validator(key(), Options) ->
+        validator_state()
+          when Options :: #{counter => counter(),
+                            size => pos_integer(),
+                            look_ahead => non_neg_integer()}.
+new_validator(Key, Options) ->
+  #{key => Key,
+    counter => maps:get(counter, Options, 0),
+    size => maps:get(size, Options, 6),
+    look_ahead => maps:get(look_ahead, Options, 5)}.
+
+-spec validate(validator_state(), Password :: pos_integer()) ->
+        {valid | invalid, validator_state()}.
+validate(#{key := Key, size := Size, counter := Counter0,
+           look_ahead := LookAhead} = State, Password) ->
+  IsValidPassword = fun(C) -> generate(Key, C, Size) =:= Password end,
+  Counter = Counter0 + 1,
+  PossibleCounters = lists:seq(Counter, Counter + LookAhead),
+  case lists:search(IsValidPassword, PossibleCounters) of
+    false ->
+      {invalid, State};
+    {value, NewCounter} ->
+      State1 = State#{counter => NewCounter},
+      {valid, State1}
+  end.
