@@ -1,7 +1,9 @@
 # Introduction
-This repository contains Erlang implementation of the "Time-Based
-One-Time Password Algorithm" defined by the [RFC
-6238](https://tools.ietf.org/html/rfc6238).
+This repository contains Erlang implementation of the [HMAC-Based
+One-Time Password](https://tools.ietf.org/html/rfc4226) and the
+[Time-Based One-Time Password](https://tools.ietf.org/html/rfc6238)
+algorithms.
+
 
 # Build
 You can build the library with:
