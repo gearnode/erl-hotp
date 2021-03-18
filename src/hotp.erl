@@ -14,6 +14,32 @@
 
 -module(hotp).
 
--export([]).
+-export([generate/3]).
 
--export_type([]).
+-spec generate(binary(), non_neg_integer(), pos_integer()) ->
+        non_neg_integer().
+generate(Key, Counter, Digit) ->
+  truncate(crypto:mac(hmac, sha, Key, <<Counter:64>>), Digit).
+
+-spec truncate(binary(), pos_integer()) ->
+        non_neg_integer().
+truncate(HMACResult, Size) ->
+  Offset = binary:at(HMACResult, 19) band 16#0f,
+  Code0 = (binary:at(HMACResult, Offset) band 16#7f) bsl 24,
+  Code1 = (binary:at(HMACResult, Offset + 1) band 16#ff) bsl 16,
+  Code2 = (binary:at(HMACResult, Offset + 2) band 16#ff) bsl 8,
+  Code3 = (binary:at(HMACResult, Offset + 3) band 16#ff),
+  P = Code0 bor Code1 bor Code2 bor Code3,
+  P rem pow10(Size).
+
+-spec pow10(non_neg_integer()) ->
+        pos_integer().
+pow10(N) when N > 0 ->
+  pow10(N, 1).
+
+-spec pow10(non_neg_integer(), non_neg_integer()) ->
+        pos_integer().
+pow10(0, Acc) ->
+  Acc;
+pow10(N, Acc) ->
+  pow10(N - 1, Acc * 10).
