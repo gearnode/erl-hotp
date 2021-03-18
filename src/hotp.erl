@@ -29,8 +29,8 @@ truncate(HMACResult, Size) ->
   S1 = (binary:at(HMACResult, Offset + 1) band 16#ff) bsl 16,
   S2 = (binary:at(HMACResult, Offset + 2) band 16#ff) bsl 8,
   S3 = (binary:at(HMACResult, Offset + 3) band 16#ff),
-  P = S0 bor S1 bor S2 bor S3,
-  P rem pow10(Size).
+  (S0 bor S1 bor S2 bor S3) rem pow10(Size).
+
 
 -spec pow10(non_neg_integer()) ->
         pos_integer().
