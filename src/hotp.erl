@@ -14,7 +14,7 @@
 
 -module(hotp).
 
--export([generate/3,
+-export([generate/2, generate/3,
          new_validator/1, new_validator/2,
          validate/2]).
 
@@ -30,6 +30,11 @@
                                counter := counter(),
                                size := pos_integer(),
                                look_ahead := non_neg_integer()}.
+
+-spec generate(key(), counter()) ->
+        password().
+generate(Key, Counter) ->
+  generate(Key, Counter, 6).
 
 -spec generate(key(), counter(), password_size()) ->
         password().
