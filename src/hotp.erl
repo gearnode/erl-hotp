@@ -23,8 +23,8 @@
 
 -type key() :: binary().
 -type counter() :: non_neg_integer().
--type password_size() :: pos_integer().
 -type password() :: non_neg_integer().
+-type password_size() :: pos_integer().
 
 -opaque validator_state() :: #{key := key(),
                                counter := counter(),
