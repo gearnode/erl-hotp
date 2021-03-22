@@ -18,7 +18,8 @@
   {registered, []},
   {applications,
    [kernel,
-    stdlib
+    stdlib,
+    crypto
    ]},
   {env,[]},
   {modules, []},
