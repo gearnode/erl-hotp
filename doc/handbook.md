@@ -21,14 +21,22 @@ The HOTP implementation is based on the [RFC
 ### `generate/2`
 Generate an `HOTP` password.
 
-Same as `generate(<<"secret">>, 0, 6)`.
+Same as `generate(<<"secret">>, 0, #{})`.
 
 ### `generate/3`
 Generate an `HOTP` password.
 
+The following options are supported:
+
+| Name      | Type    | Description                                       | Default |
+|-----------|---------|---------------------------------------------------|---------|
+| size      | integer | The number of digits in a password.               | 6       |
+| algorithm | atom    | The crypto algorithm use to generate the password | sha     |
+
+
 Example:
 ```erlang
-hotp:generate(<<"secret">>, 1, 8).
+hotp:generate(<<"secret">>, 1, #{size => 8}).
 ```
 
 ### `new_validator/1`
