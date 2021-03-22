@@ -19,27 +19,27 @@
 generate_test_() ->
   %% Vector test imported from the RFC 4226 appendix D.
   Key = <<"12345678901234567890">>,
-  Size = 6,
+  Options = #{size => 6},
   [?_assertEqual(755224,
-                 hotp:generate(Key, 0, Size)),
+                 hotp:generate(Key, 0, Options)),
    ?_assertEqual(287082,
-                 hotp:generate(Key, 1, Size)),
+                 hotp:generate(Key, 1, Options)),
    ?_assertEqual(359152,
-                 hotp:generate(Key, 2, Size)),
+                 hotp:generate(Key, 2, Options)),
    ?_assertEqual(969429,
-                 hotp:generate(Key, 3, Size)),
+                 hotp:generate(Key, 3, Options)),
    ?_assertEqual(338314,
-                 hotp:generate(Key, 4, Size)),
+                 hotp:generate(Key, 4, Options)),
    ?_assertEqual(254676,
-                 hotp:generate(Key, 5, Size)),
+                 hotp:generate(Key, 5, Options)),
    ?_assertEqual(287922,
-                 hotp:generate(Key, 6, Size)),
+                 hotp:generate(Key, 6, Options)),
    ?_assertEqual(162583,
-                 hotp:generate(Key, 7, Size)),
+                 hotp:generate(Key, 7, Options)),
    ?_assertEqual(399871,
-                 hotp:generate(Key, 8, Size)),
+                 hotp:generate(Key, 8, Options)),
    ?_assertEqual(520489,
-                 hotp:generate(Key, 9, Size))].
+                 hotp:generate(Key, 9, Options))].
 
 validate_test() ->
   Key = <<"12345678901234567890">>,

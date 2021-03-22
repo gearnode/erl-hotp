@@ -34,17 +34,21 @@
 -spec generate(key(), counter()) ->
         password().
 generate(Key, Counter) ->
-  generate(Key, Counter, 6).
+  generate(Key, Counter, #{}).
 
--spec generate(key(), counter(), password_size()) ->
-        password().
-generate(Key, Counter, Size) ->
-  truncate(crypto:mac(hmac, sha, Key, <<Counter:64>>), Size).
+-spec generate(key(), counter(), Options) ->
+        password()
+          when Options :: #{size => password_size(),
+                            algorithm => sha | sha256 | sha512}.
+generate(Key, Counter, Options) ->
+  Size = maps:get(size, Options, 6),
+  Algorithm = maps:get(algorithm, Options, sha),
+  truncate(crypto:mac(hmac, Algorithm, Key, <<Counter:64>>), Size).
 
 -spec truncate(binary(), password_size()) ->
         password().
 truncate(HMACResult, Size) ->
-  Offset = binary:at(HMACResult, 19) band 16#0f,
+  Offset = binary:at(HMACResult, byte_size(HMACResult) - 1) band 16#0f,
   S0 = (binary:at(HMACResult, Offset) band 16#7f) bsl 24,
   S1 = (binary:at(HMACResult, Offset + 1) band 16#ff) bsl 16,
   S2 = (binary:at(HMACResult, Offset + 2) band 16#ff) bsl 8,
@@ -83,7 +87,8 @@ new_validator(Key, Options) ->
         {valid | invalid, validator_state()}.
 validate(#{key := Key, size := Size, counter := Counter0,
            look_ahead := LookAhead} = State, Password) ->
-  IsValidPassword = fun(C) -> generate(Key, C, Size) =:= Password end,
+  IsValidPassword =
+    fun(C) -> generate(Key, C, #{size => Size}) =:= Password end,
   Counter = Counter0 + 1,
   PossibleCounters = lists:seq(Counter, Counter + LookAhead),
   case lists:search(IsValidPassword, PossibleCounters) of
