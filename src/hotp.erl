@@ -19,12 +19,14 @@
          validate/2]).
 
 -export_type([key/0, counter/0, password/0, password_size/0,
+              hmac_algorithms/0,
               validator_state/0]).
 
 -type key() :: binary().
 -type counter() :: non_neg_integer().
 -type password() :: non_neg_integer().
 -type password_size() :: pos_integer().
+-type hmac_algorithms() :: sha | sha256 | sha512.
 
 -opaque validator_state() :: #{key := key(),
                                counter := counter(),
@@ -39,7 +41,7 @@ generate(Key, Counter) ->
 -spec generate(key(), counter(), Options) ->
         password()
           when Options :: #{size => password_size(),
-                            algorithm => sha | sha256 | sha512}.
+                            algorithm => hmac_algorithms()}.
 generate(Key, Counter, Options) ->
   Size = maps:get(size, Options, 6),
   Algorithm = maps:get(algorithm, Options, sha),
