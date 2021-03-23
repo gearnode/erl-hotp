@@ -9,3 +9,4 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 - Generate `HOTP` password.
 - Validate `HOTP` password. 
+- Generate `TOTP` password.
