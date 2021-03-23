@@ -78,9 +78,14 @@ The TOTP implementation is based on the [RFC
 ### `generate/1`
 Generate an TOTP password.
 
-Same as `generate(<<"secret">>, #{})`.
+Same as `generate(<<"secret">>, os:system_time(second), #{})`.
 
 ### `generate/2`
+Generate an TOTP password.
+
+Same as `generate(<<"secret">>, CurrentTime, #{})`.
+
+### `generate/3`
 Generate an TOTP password.
 
 The following options are supported:
@@ -95,5 +100,5 @@ The following options are supported:
 
 Example:
 ```erlang
-hotp:generate(<<"secret">>, #{algorithm => sha512}).
+totp:generate(<<"secret">>, os:system_time(second), #{algorithm => sha512}).
 ```

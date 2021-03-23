@@ -14,7 +14,7 @@
 
 -module(totp).
 
--export([generate/1, generate/2]).
+-export([generate/1, generate/2, generate/3]).
 
 -export_type([key/0, password/0, password_size/0,
               timestamp/0]).
@@ -27,21 +27,25 @@
 -spec generate(key()) ->
         password().
 generate(Key) ->
-  generate(Key, #{}).
+  generate(Key, os:system_time(second), #{}).
 
--spec generate(key(), Options) ->
+-spec generate(key(), timestamp()) ->
+        password().
+generate(Key, CurrentTime) ->
+  generate(Key, CurrentTime, #{}).
+
+-spec generate(key(), timestamp(), Options) ->
         password()
           when Options :: #{size => password_size(),
                             step => pos_integer(),
                             initial_time => timestamp(),
                             current_time => timestamp(),
                             algorithm => hotp:hmac_algorithms()}.
-generate(Key, Options) ->
+generate(Key, CurrentTime, Options) ->
   Size = maps:get(size, Options, 6),
   Algorithm = maps:get(algorithm, Options, sha),
   Step = maps:get(step, Options, 30),
   InitialTime = maps:get(initial_time, Options, 0),
-  CurrentTime = maps:get(current_time, Options, os:system_time(second)),
   TimePeriod = time_period(CurrentTime, InitialTime, Step),
   hotp:generate(Key, TimePeriod, #{size => Size, algorithm => Algorithm}).
 
