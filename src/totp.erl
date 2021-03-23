@@ -14,15 +14,25 @@
 
 -module(totp).
 
--export([generate/1, generate/2, generate/3]).
+-export([generate/1, generate/2, generate/3,
+         new_validator/1, new_validator/2]).
 
 -export_type([key/0, password/0, password_size/0,
-              timestamp/0]).
+              timestamp/0,
+              validator_state/0]).
 
 -type key() :: hotp:key().
 -type password() :: hotp:password().
 -type password_size() :: hotp:password_size().
 -type timestamp() :: integer().
+
+-type validator_state() :: #{key := key(),
+                             size := password_size(),
+                             initial_time := timestamp(),
+                             step := pos_integer(),
+                             look_behind := non_neg_integer(),
+                             look_ahead := non_neg_integer(),
+                             last_time_period => non_neg_integer()}.
 
 -spec generate(key()) ->
         password().
@@ -53,3 +63,19 @@ generate(Key, CurrentTime, Options) ->
         non_neg_integer().
 time_period(CurrentTime, InitialTime, Step) ->
   trunc(math:floor(CurrentTime - InitialTime) / Step).
+
+-spec new_validator(key()) ->
+        validator_state().
+new_validator(Key) ->
+  new_validator(Key, #{}).
+
+-spec new_validator(key(), Options) ->
+        validator_state()
+          when Options :: #{}.
+new_validator(Key, Options) ->
+  #{key => Key,
+    size => maps:get(size, Options, 6),
+    step => maps:get(step, Options, 30),
+    initial_time => maps:get(initial_time, Options, 0),
+    look_behind => maps:get(look_behind, Options, 1),
+    look_ahead => maps:get(look_ahead, Options, 1)}.
