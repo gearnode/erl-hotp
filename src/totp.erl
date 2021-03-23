@@ -18,18 +18,19 @@
          new_validator/1, new_validator/2]).
 
 -export_type([key/0, password/0, password_size/0,
-              timestamp/0,
+              timestamp/0, step/0,
               validator_state/0]).
 
 -type key() :: hotp:key().
 -type password() :: hotp:password().
 -type password_size() :: hotp:password_size().
 -type timestamp() :: integer().
+-type step() :: pos_integer().
 
 -type validator_state() :: #{key := key(),
                              size := password_size(),
                              initial_time := timestamp(),
-                             step := pos_integer(),
+                             step := step(),
                              look_behind := non_neg_integer(),
                              look_ahead := non_neg_integer(),
                              last_time_period => non_neg_integer()}.
@@ -47,7 +48,7 @@ generate(Key, CurrentTime) ->
 -spec generate(key(), timestamp(), Options) ->
         password()
           when Options :: #{size => password_size(),
-                            step => pos_integer(),
+                            step => step(),
                             initial_time => timestamp(),
                             algorithm => hotp:hmac_algorithms()}.
 generate(Key, CurrentTime, Options) ->
