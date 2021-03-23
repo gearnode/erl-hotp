@@ -49,7 +49,6 @@ generate(Key, CurrentTime) ->
           when Options :: #{size => password_size(),
                             step => pos_integer(),
                             initial_time => timestamp(),
-                            current_time => timestamp(),
                             algorithm => hotp:hmac_algorithms()}.
 generate(Key, CurrentTime, Options) ->
   Size = maps:get(size, Options, 6),
