@@ -86,7 +86,7 @@ new_validator(Key, Options) ->
     look_ahead => maps:get(look_ahead, Options, 5)}.
 
 -spec validate(validator_state(), password()) ->
-        {valid | invalid, validator_state()}.
+        {valid, validator_state()} | invalid.
 validate(#{key := Key, size := Size, counter := Counter0,
            look_ahead := LookAhead} = State, Password) ->
   IsValidPassword =
@@ -95,7 +95,7 @@ validate(#{key := Key, size := Size, counter := Counter0,
   PossibleCounters = lists:seq(Counter, Counter + LookAhead),
   case lists:search(IsValidPassword, PossibleCounters) of
     false ->
-      {invalid, State};
+      invalid;
     {value, NewCounter} ->
       State1 = State#{counter => NewCounter},
       {valid, State1}

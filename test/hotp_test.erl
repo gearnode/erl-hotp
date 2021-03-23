@@ -43,39 +43,30 @@ generate_test_() ->
 
 validate_test() ->
   Key = <<"12345678901234567890">>,
-  State = hotp:new_validator(Key, #{look_ahead => 2}),
+  State1 = hotp:new_validator(Key, #{look_ahead => 2}),
 
-  {Valid1, State1} = hotp:validate(State, 123456),
-  ?assertEqual(invalid, Valid1),
-  ?assertMatch(#{counter := 0}, State1),
+  ?assertEqual(invalid, hotp:validate(State1, 123456)),
   
   {Valid2, State2} = hotp:validate(State1, 287082),
   ?assertEqual(valid, Valid2),
   ?assertMatch(#{counter := 1}, State2),
 
   %% As the previous code has be valid it must not be valid anymore.
-  {Valid3, State3} = hotp:validate(State2, 287082),
-  ?assertEqual(invalid, Valid3),
-  ?assertMatch(#{counter := 1}, State3),
+  ?assertEqual(invalid,  hotp:validate(State2, 287082)),
+  ?assertMatch(#{counter := 1}, State2),
 
-  {Valid4, State4} = hotp:validate(State3, 359152),
-  ?assertEqual(valid, Valid4),
-  ?assertMatch(#{counter := 2}, State4),
+  {Valid3, State3} = hotp:validate(State2, 359152),
+  ?assertEqual(valid, Valid3),
+  ?assertMatch(#{counter := 2}, State3),
 
   %% As look ahead is set to 2, the code must be valid and the counter must be
   %% set to 5.
-  {Valid5, State5} = hotp:validate(State4, 254676),
-  ?assertEqual(valid, Valid5),
-  ?assertMatch(#{counter := 5}, State5),
+  {Valid4, State4} = hotp:validate(State3, 254676),
+  ?assertEqual(valid, Valid4),
+  ?assertMatch(#{counter := 5}, State4),
 
-  {Valid6, State6} = hotp:validate(State5, 338314),
-  ?assertEqual(invalid, Valid6),
-  ?assertMatch(#{counter := 5}, State6),
+  ?assertEqual(invalid, hotp:validate(State4, 338314)),
 
-  {Valid7, State7} = hotp:validate(State6, 254676),
-  ?assertEqual(invalid, Valid7),
-  ?assertMatch(#{counter := 5}, State7),
+  ?assertEqual(invalid, hotp:validate(State4, 254676)),
 
-  {Valid8, State8} = hotp:validate(State7, 520489),
-  ?assertEqual(invalid, Valid8),
-  ?assertMatch(#{counter := 5}, State8).
+  ?assertEqual(invalid, hotp:validate(State4, 520489)).
