@@ -70,3 +70,30 @@ Example:
 ValidatorState = hotp:new_validator(<<"secret">>),
 {valid, NewValidatorState} = hotp:validate(ValidatorState, 533881).
 ```
+
+## `totp`
+The TOTP implementation is based on the [RFC
+6238](https://tools.ietf.org/html/rfc6238).
+
+### `generate/1`
+Generate an `TOTP` password.
+
+Same as `generate(<<"secret">>, #{})`.
+
+### `generate/2`
+Generate an `TOTP` password.
+
+The following options are supported:
+
+| Name         | Type    | Description                                       | Default |
+|--------------|---------|---------------------------------------------------|---------|
+| size         | integer | The number of digits in a password.               | 6       |
+| algorithm    | atom    | The crypto algorithm use to generate the password | sha     |
+| step         | integer | The time step in seconds                          | 30      |
+| initial_time | integer | The Unix time to start counting time steps        | 0       |
+| current_time | integer | TODO                                              | Now()   |
+
+Example:
+```erlang
+hotp:generate(<<"secret">>, #{algorithm => sha512}).
+```
