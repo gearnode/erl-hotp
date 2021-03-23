@@ -35,7 +35,7 @@ generate(Key) ->
                             step => pos_integer(),
                             initial_time => timestamp(),
                             current_time => timestamp(),
-                            algorithm => hotp:hmac_algorithm()}.
+                            algorithm => hotp:hmac_algorithms()}.
 generate(Key, Options) ->
   Size = maps:get(size, Options, 6),
   Algorithm = maps:get(algorithm, Options, sha),
