@@ -141,5 +141,5 @@ Validates a TOTP password given a validator state.
 Example:
 ```erlang
 ValidatorState = totp:new_validator(<<"secret">>),
-{valid, NewValidatorState} = hotp:validate(ValidatorState, 533881).
+{valid, NewValidatorState} = totp:validate(ValidatorState, 533881).
 ```
