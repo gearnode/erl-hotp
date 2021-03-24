@@ -103,3 +103,43 @@ Example:
 ```erlang
 totp:generate(<<"secret">>, os:system_time(second), #{algorithm => sha512}).
 ```
+
+### `new_validator/1`
+Returns a validator state that can be used by `validate/2` to validate
+the TOTP password.
+
+Same as `new_validator(<<"secret">>, #{})`.
+
+### `new_validator/2`
+Returns a validator state that can be used by `validate/2` to validate
+the TOTP password.
+
+The following options are supported:
+
+| Name         | Type      | Description                                         | Default |
+|--------------|-----------|-----------------------------------------------------|---------|
+| size         | integer   | The number of digits in a password.                 | 6       |
+| step         | integer   | The length of a time period in seconds.             | 30      |
+| look_behind  | integer   | The number of past periods to check for validity.   | 1       |
+| look_ahead   | integer   | The number of future periods to check for validity. | 1       |
+| initial_time | timestamp | The initial timestamp used to compute time periods. | 0       |
+| algorithm    | atom      | The crypto algorithm use to generate the password.  | sha     |
+
+Example:
+```erlang
+ValidatorState = totp:new_validator(<<"secret">>, #{size => 8}).
+```
+
+### `validate/2`
+Validates a TOTP password given a validator state.
+
+Same as `validate(<<"secret">>, Password, os:system_time(second))`.
+
+### `validate/3`
+Validates a TOTP password given a validator state.
+
+Example:
+```erlang
+ValidatorState = totp:new_validator(<<"secret">>),
+{valid, NewValidatorState} = hotp:validate(ValidatorState, 533881).
+```
