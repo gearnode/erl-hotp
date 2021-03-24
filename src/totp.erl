@@ -77,6 +77,7 @@ new_validator(Key, Options) ->
   #{key => Key,
     size => maps:get(size, Options, 6),
     step => maps:get(step, Options, 30),
+    algorithm => maps:get(algorithm, Options, sha),
     initial_time => maps:get(initial_time, Options, 0),
     look_behind => maps:get(look_behind, Options, 1),
     look_ahead => maps:get(look_ahead, Options, 1)}.
