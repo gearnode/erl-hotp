@@ -72,7 +72,12 @@ new_validator(Key) ->
 
 -spec new_validator(key(), Options) ->
         validator_state()
-          when Options :: #{}.
+          when Options :: #{size => password_size(),
+                            step => step(),
+                            algorithm => hotp:hmac_algorithms(),
+                            initial_time => timestamp(),
+                            look_behind => non_neg_integer(),
+                            look_ahead => non_neg_integer()}.
 new_validator(Key, Options) ->
   #{key => Key,
     size => maps:get(size, Options, 6),
