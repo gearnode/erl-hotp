@@ -12,7 +12,7 @@
 %% ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
 %% IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
--module(hotp_test).
+-module(hotp_tests).
 
 -include_lib("eunit/include/eunit.hrl").
 
@@ -46,7 +46,7 @@ validate_test() ->
   State1 = hotp:new_validator(Key, #{look_ahead => 2}),
 
   ?assertEqual(invalid, hotp:validate(State1, 123456)),
-  
+
   {Valid2, State2} = hotp:validate(State1, 287082),
   ?assertEqual(valid, Valid2),
   ?assertMatch(#{counter := 1}, State2),

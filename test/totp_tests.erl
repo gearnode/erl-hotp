@@ -12,7 +12,7 @@
 %% ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
 %% IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
--module(totp_test).
+-module(totp_tests).
 
 -include_lib("eunit/include/eunit.hrl").
 
@@ -75,7 +75,7 @@ generate_test_() ->
 validate_test() ->
   Key = <<"12345678901234567890">>,
   State1 = totp:new_validator(Key, #{step => 10}),
-  
+
   ?assertMatch({valid, _}, totp:validate(State1, 254676, 50)),
   ?assertMatch({valid, _}, totp:validate(State1, 254676, 59)),
   ?assertMatch({valid, _}, totp:validate(State1, 254676, 40)),
