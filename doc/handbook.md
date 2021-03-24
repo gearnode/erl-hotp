@@ -51,11 +51,12 @@ the HOTP password.
 
 The following options are supported:
 
-| Name       | Type    | Description                                   | Default |
-|------------|---------|-----------------------------------------------|---------|
-| counter    | integer | The initial counter value.                    | 0       |
-| size       | integer | The number of digits in a password.           | 6       |
-| look_ahead | integer | The number of next counters to check validity | 5       |
+| Name       | Type    | Description                                       | Default |
+|------------|---------|---------------------------------------------------|---------|
+| counter    | integer | The initial counter value.                        | 0       |
+| size       | integer | The number of digits in a password.               | 6       |
+| look_ahead | integer | The number of next counters to check validity     | 5       |
+| algorithm  | atom    | The crypto algorithm use to generate the password | sha     |
 
 Example:
 ```erlang
