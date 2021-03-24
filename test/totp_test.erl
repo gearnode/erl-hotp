@@ -71,3 +71,20 @@ generate_test_() ->
    ?_assertEqual(47863826,
                  totp:generate(Key3, T("2603-10-11T11:33:20Z"),
                                #{size => 8, algorithm => sha512}))].
+
+validate_test() ->
+  Key = <<"12345678901234567890">>,
+  State1 = totp:new_validator(Key, #{step => 10}),
+  
+  ?assertMatch({valid, _}, totp:validate(State1, 254676, 50)),
+  ?assertMatch({valid, _}, totp:validate(State1, 254676, 59)),
+  ?assertMatch({valid, _}, totp:validate(State1, 254676, 40)),
+  ?assertMatch({valid, _}, totp:validate(State1, 254676, 69)),
+
+  ?assertEqual(invalid, totp:validate(State1, 254676, 39)),
+  ?assertEqual(invalid, totp:validate(State1, 254676, 70)),
+
+  %% Cannot reuse the last code
+  {valid, State2} = totp:validate(State1, 254676, 50),
+  ?assertEqual(invalid, totp:validate(State2, 254676, 55)).
+
