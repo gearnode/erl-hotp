@@ -27,13 +27,14 @@
 -type timestamp() :: integer().
 -type step() :: pos_integer().
 
--type validator_state() :: #{key := key(),
-                             size := password_size(),
-                             initial_time := timestamp(),
-                             step := step(),
-                             look_behind := non_neg_integer(),
-                             look_ahead := non_neg_integer(),
-                             last_time_period => non_neg_integer()}.
+-opaque validator_state() :: #{key := key(),
+                               size := password_size(),
+                               initial_time := timestamp(),
+                               step := step(),
+                               algorithm := hotp:hmac_algorithms(),
+                               look_behind := non_neg_integer(),
+                               look_ahead := non_neg_integer(),
+                               last_time_period => non_neg_integer()}.
 
 -spec generate(key()) ->
         password().
