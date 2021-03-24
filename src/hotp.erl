@@ -30,6 +30,7 @@
 
 -opaque validator_state() :: #{key := key(),
                                counter := counter(),
+                               algorithm := hmac_algorithms(),
                                size := pos_integer(),
                                look_ahead := non_neg_integer()}.
 
@@ -83,14 +84,18 @@ new_validator(Key, Options) ->
   #{key => Key,
     counter => maps:get(counter, Options, 0),
     size => maps:get(size, Options, 6),
+    algorithm => maps:get(algorithm, Options, sha),
     look_ahead => maps:get(look_ahead, Options, 5)}.
 
 -spec validate(validator_state(), password()) ->
         {valid, validator_state()} | invalid.
 validate(#{key := Key, size := Size, counter := Counter0,
-           look_ahead := LookAhead} = State, Password) ->
+           algorithm := Algorithm, look_ahead := LookAhead} = State,
+         Password) ->
   IsValidPassword =
-    fun(C) -> generate(Key, C, #{size => Size}) =:= Password end,
+    fun(C) ->
+        generate(Key, C, #{size => Size, algorithm => Algorithm}) =:= Password
+    end,
   Counter = Counter0 + 1,
   PossibleCounters = lists:seq(Counter, Counter + LookAhead),
   case lists:search(IsValidPassword, PossibleCounters) of
