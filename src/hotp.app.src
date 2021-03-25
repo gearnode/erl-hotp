@@ -19,7 +19,9 @@
   {applications,
    [kernel,
     stdlib,
-    crypto
+    crypto,
+    base32,
+    uri
    ]},
   {env,[]},
   {modules, []},
