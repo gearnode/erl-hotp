@@ -88,3 +88,12 @@ validate_test() ->
   {valid, State2} = totp:validate(State1, 254676, 50),
   ?assertEqual(invalid, totp:validate(State2, 254676, 55)).
 
+otpauth_uri_test() ->
+  Key = <<"12345">>,
+  State = totp:new_validator(Key, #{size => 8, step => 60}),
+  Issuer = <<"Exograd">>,
+  Account = <<"bryan@frimin.fr">>,
+  URI = totp:otpauth_uri(State, Issuer, Account),
+  ?assertEqual(<<"otpauth://totp/Exograd:bryan@frimin.fr?secret=GEZDGNBV&issuer=Exograd&algorithm=SHA1&digits=8&period=60">>, URI).
+
+

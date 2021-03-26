@@ -70,3 +70,11 @@ validate_test() ->
   ?assertEqual(invalid, hotp:validate(State4, 254676)),
 
   ?assertEqual(invalid, hotp:validate(State4, 520489)).
+
+otpauth_uri_test() ->
+  Key = <<"12345">>,
+  State = hotp:new_validator(Key, #{size => 8}),
+  Issuer = <<"Exograd">>,
+  Account = <<"bryan@frimin.fr">>,
+  URI = hotp:otpauth_uri(State, Issuer, Account),
+  ?assertEqual(<<"otpauth://hotp/Exograd:bryan@frimin.fr?secret=GEZDGNBV&issuer=Exograd&algorithm=SHA1&digits=8&counter=0">>, URI).
