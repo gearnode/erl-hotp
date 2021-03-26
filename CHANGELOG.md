@@ -11,3 +11,4 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Validate `HOTP` password. 
 - Generate `TOTP` password.
 - Validate `TOTP` password.
+- Generate `otpauth://` URI from validator state.
