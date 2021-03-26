@@ -16,7 +16,8 @@
 
 -export([generate/2, generate/3,
          new_validator/1, new_validator/2,
-         validate/2]).
+         validate/2,
+         otpauth_uri/3]).
 
 -export_type([key/0, counter/0, password/0, password_size/0,
               hmac_algorithms/0,
@@ -105,3 +106,11 @@ validate(#{key := Key, size := Size, counter := Counter0,
       State1 = State#{counter => NewCounter},
       {valid, State1}
   end.
+
+-spec otpauth_uri(validator_state(), binary(), binary()) ->
+        binary().
+otpauth_uri(#{key := Key, size := Size, counter := Counter,
+              algorithm := Algorithm},
+            Issuer, Account) ->
+  Parameters = [{<<"counter">>, integer_to_binary(Counter)}],
+  otpauth:generate(hotp, Key, Size, Algorithm, Issuer, Account, Parameters).

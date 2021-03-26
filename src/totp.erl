@@ -16,7 +16,8 @@
 
 -export([generate/1, generate/2, generate/3,
          new_validator/1, new_validator/2,
-         validate/2, validate/3]).
+         validate/2, validate/3,
+         otpauth_uri/3]).
 
 -export_type([key/0, password/0, password_size/0,
               timestamp/0, step/0,
@@ -120,3 +121,10 @@ validate(#{initial_time := InitialTime, step := Step, size := Size,
           {valid, State1}
       end
   end.
+
+-spec otpauth_uri(validator_state(), binary(), binary()) ->
+        binary().
+otpauth_uri(#{key := Key, size := Size, step := Step, algorithm := Algorithm},
+            Issuer, Account) ->
+  Parameters = [{<<"period">>, integer_to_binary(Step)}],
+  otpauth:generate(totp, Key, Size, Algorithm, Issuer, Account, Parameters).

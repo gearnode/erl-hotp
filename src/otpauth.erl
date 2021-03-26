@@ -29,10 +29,10 @@
 -spec generate(type(), key(), password_size(), algorithm(), issuer(),
                account(), uri:query()) -> binary().
 generate(Type, Key, Size, Algorithm, Issuer, Account, Parameters) ->
-  Query0 = [{<<"secret">>, base32:encode(Key)},
-           {<<"issuer">>, Issuer},
-           {<<"algorithm">>, algorithm_to_binary(Algorithm)},
-           {<<"digits">>, integer_to_binary(Size)}],
+  Query0 = [{<<"secret">>, base32:encode(Key, [nopad])},
+            {<<"issuer">>, Issuer},
+            {<<"algorithm">>, algorithm_to_binary(Algorithm)},
+            {<<"digits">>, integer_to_binary(Size)}],
   Query = Query0 ++ Parameters,
   Label = io_lib:format("/~s:~s", [Issuer, Account]),
   URI = #{scheme => <<"otpauth">>, host => atom_to_binary(Type),
