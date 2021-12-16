@@ -23,15 +23,15 @@ You can generate the test coverage with:
 A handbook is available [in the `doc` directory](doc/handbook.md).
 
 # Contact
-If you find a bug or have any question, feel free to open a Github issue
-or to contact me [by email](mailto:bryan@frimin.fr).
+If you find a bug or have any question, feel free to open a Github
+issue.
 
-Please note that I do not currently review or accept any contribution.
+Please not that we do not currently review or accept any contribution.
 
 # Licence
 Released under the ISC license.
 
-Copyright (c) 2021 Bryan Frimin <bryan@frimin.fr>.
+Copyright (c) 2021 Exograd SAS.
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
