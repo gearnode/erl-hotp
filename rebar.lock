@@ -1,8 +1,8 @@
 [{<<"base32">>,
   {git,"https://github.com/exograd/erl-base32.git",
-       {ref,"780615f2e665cafb55b397d32350941b61e3d8ee"}},
+       {ref,"759bd30def77fa41c7486a80ade5f98067337f3b"}},
   0},
  {<<"uri">>,
-  {git,"https://github.com/galdor/erl-uri.git",
-       {ref,"6d09b15b555a47f3562cca9b5289a007ba26620f"}},
+  {git,"https://github.com/exograd/erl-uri.git",
+       {ref,"4d217279c3c850a5a02a9cc9e0d9881646d658e6"}},
   0}].
