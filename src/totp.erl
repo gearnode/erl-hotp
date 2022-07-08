@@ -1,3 +1,4 @@
+%% Copyright (c) 2022 Bryan Frimin <bryan@frimin.fr>.
 %% Copyright (c) 2021 Exograd SAS.
 %%
 %% Permission to use, copy, modify, and/or distribute this software for any

@@ -1,3 +1,4 @@
+%% Copyright (c) 2022 Bryan Frimin <bryan@frimin.fr>.
 %% Copyright (c) 2021 Exograd SAS.
 %%
 %% Permission to use, copy, modify, and/or distribute this software for any
@@ -95,5 +96,3 @@ otpauth_uri_test() ->
   Account = <<"bryan@frimin.fr">>,
   URI = totp:otpauth_uri(State, Issuer, Account),
   ?assertEqual(<<"otpauth://totp/Exograd:bryan@frimin.fr?secret=GEZDGNBV&issuer=Exograd&algorithm=SHA1&digits=8&period=60">>, URI).
-
-

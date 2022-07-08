@@ -31,7 +31,7 @@ Please not that we do not currently review or accept any contribution.
 # Licence
 Released under the ISC license.
 
-Copyright (c) 2021 Exograd SAS.
+Copyright (c) 2022 Bryan Frimin <bryan@frimin.fr>.
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
